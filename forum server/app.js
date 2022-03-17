@@ -1,7 +1,10 @@
 // Test
 const express = require('express')
 const app = express()
-const port = 3000
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -9,7 +12,8 @@ const jwt = require('jsonwebtoken')
 const bp = require('body-parser')
 const cp = require('cookie-parser')
 
-const mysql = require('mysql')
+// const mysql = require('mysql')
+const { Client } = require('pg')
 const config = require('./config')
 const { response } = require('express')
 
@@ -21,7 +25,12 @@ app.use(cp())
 const secret = 'hT%adgsd67a&s76d66&gd76ag9kjwdy2'
 
 // MySQL connection
-const connection = mysql.createConnection(config)
+// const connection = mysql.createConnection(config)
+
+const connection = new Client(config);
+await connection.connect();
+const res = await client.query('SELECT $1::text as connected', ['Connection to postgres successful!']);
+
 
 // Header setup
 app.use(function (req, res, next) {
@@ -72,7 +81,6 @@ app.post('/user', (req, res) => {
     }
   })
 })
-
 
 // Login user
 app.post('/login', async (req, res) => {
