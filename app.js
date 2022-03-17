@@ -28,8 +28,7 @@ const secret = 'hT%adgsd67a&s76d66&gd76ag9kjwdy2'
 // const connection = mysql.createConnection(config)
 
 const connection = new Client(config);
-await connection.connect();
-const res = await client.query('SELECT $1::text as connected', ['Connection to postgres successful!']);
+async () => {await connection.connect()};
 
 
 // Header setup
